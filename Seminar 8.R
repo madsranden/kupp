@@ -16,11 +16,11 @@ fore
 
 #### For-loops ####
 
-# For-loops inneholder følgende argumenter:
+# For-loops inneholder fÃ¸lgende argumenter:
 ## 1. "for", som indikerer at vi vil ha en for-loop
-## 2. En indikator som sier at vi vil gjøre hver operasjon på denne.
+## 2. En indikator som sier at vi vil gjÃ¸re hver operasjon pÃ¥ denne.
 ## 3. Et objekt med mange verdier (en vektor) som vi har liggende.
-## 4. En kode mellom krøllparentesene som sier hva slags funksjon som skal gjøres for hver indikator i vektoren (dvs. hver i).
+## 4. En kode mellom krÃ¸llparentesene som sier hva slags funksjon som skal gjÃ¸res for hver indikator i vektoren (dvs. hver i).
 
 # for(i in vector) {
 #   .. do something ..
@@ -36,13 +36,13 @@ for (i in coups$year) {
 
 # Eksempel 2: For hver kolonne i coups, gi meg gjennomsnittet av variablene
 
-out <- vector("double", ncol(coups)) # Vi må lage et objekt som vi kan plassere gjennomsnittene inni
+out <- vector("double", ncol(coups)) # Vi mÃ¥ lage et objekt som vi kan plassere gjennomsnittene inni
 
-for (i in seq_along(coups)) { # Bruker seq_along for å si at vi vil gjøre operasjonen for hver del av coups.
-  out[[i]] <- mean(coups[[i]], na.rm = TRUE) # Går inni kolonnene [[i]] i coups og beregner gjennomsnitt uten å ta hensyn til missing. Plasserer i out
+for (i in seq_along(coups)) { # Bruker seq_along for Ã¥ si at vi vil gjÃ¸re operasjonen for hver del av coups.
+  out[[i]] <- mean(coups[[i]], na.rm = TRUE) # GÃ¥r inni kolonnene [[i]] i coups og beregner gjennomsnitt uten Ã¥ ta hensyn til missing. Plasserer i out
   out <- round(out, 2) # Runder av gjennomsnittet til to desimaler
   tmp <- data.frame(out = out, # Lager en dataframe med to kolonner; gjennomsnittene
-                    var = colnames(coups)) # ... og navnene på kolonnene til coups.
+                    var = colnames(coups)) # ... og navnene pÃ¥ kolonnene til coups.
 }
 
 tmp
@@ -57,14 +57,14 @@ coup1 <- coups %>%
 
 
 # Hente ut enkelte verdier
-## Tar bare med observasjoner for årene 1980 til 1995 og år 2001.
+## Tar bare med observasjoner for Ã¥rene 1980 til 1995 og Ã¥r 2001.
 coup2 <- coup1 %>%
   filter(year %in% 1980:1995 | year %in% 2001)
 
 
-# Endre navn på variabler
+# Endre navn pÃ¥ variabler
 
-head(coup2) # Ser på variablene fra før
+head(coup2) # Ser pÃ¥ variablene fra fÃ¸r
 
 ## Gir variablene norske navn
 coup3 <- coup2 %>%
@@ -76,12 +76,12 @@ coup3 <- coup2 %>%
 
 
 # Lager en ny variabel
-## Lager variabel som måler omkoder handel til proporsjoner
+## Lager variabel som mÃ¥ler omkoder handel til proporsjoner
 coup4 <- coup3 %>%
   mutate(Handel_prop = Handel/100)
 
 
-# Lager en variabel som tar verdi 1 hvis året er over 1980, 0 ellers.
+# Lager en variabel som tar verdi 1 hvis Ã¥ret er over 1980, 0 ellers.
 coup5 <- coup4 %>%
   mutate(Demokrati_aar = ifelse(Aar >= 1980, 1,
                                 0))
@@ -104,7 +104,7 @@ coup_test <- coups %>%
   anti_join(coup_train)
 
 
-#### Regresjon for å predikere demokrati ####
+#### Regresjon for Ã¥ predikere demokrati ####
 
 form1 <- coup ~ democracy + unrest + coupyears + milper1 + milexp3
 
@@ -113,7 +113,7 @@ lm1 <- lm(form1,
 
 stargazer::stargazer(lm1, type = "text")
 
-# Dersom vi ikke vil ha med tilfeller der det er over 100 år siden sist kuppforsøk.
+# Dersom vi ikke vil ha med tilfeller der det er over 100 Ã¥r siden sist kuppforsÃ¸k.
 
 form2 <- update(form1, .~. - coupyears + I(coupyears <= 100))
 
@@ -122,14 +122,6 @@ lm2 <- lm(form2,
 
 stargazer::stargazer(lm1, lm2, type = "text") # Rapporterer de to modellene ved siden av hverandre
 
-# Stargazer tar flere argumenter, f. eks.:
-## Gi variabelnavn: covariate.labels
-## Gi navn på avhengig variabel: dep.var.labels 
-## Ta bort avhengig variabel: dep.var.labels.include
-## Navngi modeller: column.labels
-## Ta bort uavhengige variabler: omit
-## Ta bort sammendragsstatistikk nederst: omit.stat
-### Og mange fler: https://www.jakeruss.com/cheatsheets/stargazer/ 
 
 
 #### Logistisk modell ####
@@ -143,7 +135,7 @@ stargazer::stargazer(lm1, lm2, glm1, type = "text")
 
 #### Random forest ####
 
-forest1 <- randomForest(as.factor(coup) ~ # Konverterer "coup" til factor for å kunne gjøre klassifisering.
+forest1 <- randomForest(as.factor(coup) ~ # Konverterer "coup" til factor for Ã¥ kunne gjÃ¸re klassifisering.
                           democracy + unrest + coupyears + milper1 + milexp3, 
                         mtry = 3, # mtry < antall prediktorer gir random forest. Like mange grener som prediktorer (her 5) = en bagging modell.
                         na.action = "na.exclude",
@@ -157,9 +149,6 @@ forest1
 ## (Classification only) A vector of length equal to number of classes. The 'winning' class for an observation is the one with the maximum 
 ## ratio of proportion of votes to cutoff. Default is 1/k where k is the number of classes (i.e., majority vote wins).
 
-# Normalt setter forest-modellen kuttpunktet til 0.5. Verdier som overstiger 0.5 blir klassifisert som 1, de under får 0.
-# Noen ganger er dette urealistisk, som f. eks. hvis det er veldig få verdier på en responsvariabel (som ved kuppforsøk).
-# https://stackoverflow.com/questions/25433805/how-do-you-change-the-cutoff-parameter-in-rs-randomforest 
 
 
 
@@ -169,12 +158,12 @@ varImpPlot(forest1)
 importance(forest1)
 
 
-#### Confusion matrix for å måle hvor godt modellene predikerer (i test-data) ####
+#### Confusion matrix for Ã¥ mÃ¥le hvor godt modellene predikerer (i test-data) ####
 pred1 <- predict(lm1)
 pred2 <- predict(lm2)
 pred3 <- predict(glm1, type = "response")
 
-pred1 <- ifelse(pred1 > 0.1, # Når sjansen for kupp er over 10 % (svært lavt siden kupp er veldig sjeldent)
+pred1 <- ifelse(pred1 > 0.1, # NÃ¥r sjansen for kupp er over 10 % (svÃ¦rt lavt siden kupp er veldig sjeldent)
                 1, # Prediker kupp
                 0) # Hvis ikke, prediker ikke-kupp
 
@@ -198,20 +187,20 @@ knitr::kable(list(tab1, tab2, tab3, tab4))
 
 (tab1[1,1] # Radplass 1 og kolonneplass 1 (dvs. der de korrekt predikerte ikke-kuppene er)
   + tab1[2,2])/ # Radplass 2 og kolonneplass 2 (dvs. der de korrekt predikerte kuppene er)
-  nrow(coup_train) # Del på antall observasjoner av kupp.
-# 0.943 - lineær modell
+  nrow(coup_train) # Del pÃ¥ antall observasjoner av kupp.
+# 0.943 - lineÃ¦r modell
 
-(tab2[1,1] + tab2[2,2])/nrow(coup_train) # 0.945 - modifisert lineær modell
+(tab2[1,1] + tab2[2,2])/nrow(coup_train) # 0.945 - modifisert lineÃ¦r modell
 (tab3[1,1] + tab3[2,2])/nrow(coup_train) # 0.842 - logistisk modell
 (tab4[1,1] + tab4[2,2])/nrow(coup_train) # 0.951 - random forest
 
 
 #### Support vektor maskin ####
 
-# For å bestemme "levels" i data:
+# For Ã¥ bestemme "levels" i data:
 coup_train$coup = ordered(coup_train$coup, labels = c(0, 1))
 levels(coup_train$coup)
-### Modellen tar alltid den første som referansekategori.
+### Modellen tar alltid den fÃ¸rste som referansekategori.
 
 coup_test$coup <- as.factor(coup_test$coup)
 coup_train$coup <- as.factor(coup_train$coup)
@@ -231,7 +220,7 @@ tab5 <- table(fitted(support), coup_train$coup)
 
 
 #### ROC-kurver ####
-# Hvordan gjør modellene det på treningsdata?
+# Hvordan gjÃ¸r modellene det pÃ¥ treningsdata?
 
 roc1 <- roc(response = coup_test$coup, 
             predictor = predict(glm1, coup_test)) # Logistisk modell
